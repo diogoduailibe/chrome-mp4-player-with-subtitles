@@ -23,17 +23,6 @@ nav.vertical ul li{	display:block;}/* vertical menu */
 nav.horizontal ul li{	display: inline-block;}/* horizontal menu */
 img{max-width:100%;}
 /*end reset*/
-@font-face {
-    font-family: 'gandhi_sansregular';
-    src: url('../fonts/GandhiSans-Regular-webfont.eot');
-    src: url('../fonts/GandhiSans-Regular-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/GandhiSans-Regular-webfont.woff') format('woff'),
-         url('../fonts/GandhiSans-Regular-webfont.ttf') format('truetype'),
-         url('../fonts/GandhiSans-Regular-webfont.svg#gandhi_sansregular') format('svg');
-    font-weight: normal;
-    font-style: normal;
-
-}
 
 * {
 	margin:0;

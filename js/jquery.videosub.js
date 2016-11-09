@@ -39,7 +39,8 @@
         if (typeof (typeof (_a = $('<video>').addtrack) !== "undefined" && _a !== null)) {
             opts = $.extend({}, $.fn.videoSub.defaults, options);
             return this.each(function() {
-                var $this, _a, bar, container, el, o, src;
+                var $this, _a, bar, container, el, o, src, $body;
+                $body = $('body');
                 el = this;
                 $this = $(this);
                 o = (typeof (_a = $.meta) !== "undefined" && _a !== null) ? $.extend(opts, $this.data()) : opts;
@@ -49,10 +50,11 @@
                     container.css('position', 'relative');
                     container = $this.wrap(container).parent();
                     bar = $('<div class="' + o.barClass + '">');
-                    bar.css('width', $this.outerWidth() - 40);
                     if (o.useBarDefaultStyle) {
                         bar.css(css_normal);
+                        bar.css('width',$this.outerWidth() - 40);
                     }
+                    bar.css('left', parseInt(''+(0.625*(parseInt($body.css('width'),10) - 1280)),10)+'px');
                     bar = bar.appendTo(container);
                     el.subtitles = [];
                     el.subcount = 0;
@@ -70,11 +72,17 @@
 
                         $this.bind('webkitfullscreenchange',function(e){
                             if (document.webkitIsFullScreen === true) {
-                                return bar.css(css_fullscreen);
-                                bar.css('width', $this.outerWidth() - 40);
+                                if (o.useBarDefaultStyle) {
+                                    bar.css(css_fullscreen);
+                                    var left = parseInt(''+(0.4375*(parseInt($this.outerWidth(),10) - 1280)+200),10)+'px';
+                                    bar.css('left', left);
+                                }
                             }else {
-                                bar.css('width', $this.outerWidth() - 40);
-                                return bar.css(css_normal);
+                                if (o.useBarDefaultStyle){
+                                    bar.css(css_normal);
+                                    var left = parseInt(''+(0.625*(parseInt($body.css('width'),10) - 1280)),10)+'px';
+                                    bar.css('left', left);
+                                }
                             }
                         });
 
@@ -133,7 +141,6 @@
     };
     tcsecs = function(tc) {
         var secs, tc1, tc2;
-        console.log(tc);
         tc1 = tc.split(',');
         tc2 = tc1[0].split(':');
         return (secs = Math.floor(tc2[0] * 60 * 60) + Math.floor(tc2[1] * 60) + Math.floor(tc2[2]));
