@@ -54,7 +54,7 @@
                         bar.css(css_normal);
                         bar.css('width',$this.outerWidth() - 40);
                     }
-                    bar.css('left', parseInt(''+(0.625*(parseInt($body.css('width'),10) - 1280)),10)+'px');
+                    bar.css('left', parseInt(''+(0.375*(parseInt($body.css('width'),10) - 1280)),10)+'px');
                     bar = bar.appendTo(container);
                     el.subtitles = [];
                     el.subcount = 0;
