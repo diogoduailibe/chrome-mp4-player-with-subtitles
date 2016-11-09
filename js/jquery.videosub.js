@@ -7,54 +7,45 @@
  ------------------------------------------------------------------------------ */
 (function($) {
     var ajax = $.ajax;
-    var tcsecs, timecode_max, timecode_min;
+    var tcsecs, timecode_max, timecode_min, subtitle_positioning;
     var css_normal = {
         'position': 'absolute',
-        'bottom': '40px',
-        'padding': '0 55px',
         'text-align': 'center',
         'color': 'yellow',
         'font-family': 'Helvetica, Arial, sans-serif',
         'font-size': '24px',
         'font-weight': 'normal',
         'text-shadow': '#000000 1px 1px 0px',
-        'z-index':'2147483648',
-        'left': '0px'
+        'z-index':'2147483648'
     };
     var css_fullscreen = {
         'position': 'absolute',
-        'bottom': '40px',
-        'padding': '0px 55px',
         'text-align': 'center',
         'color': 'yellow',
         'font-family': 'Helvetica, Arial, sans-serif',
         'font-size': '34px',
         'font-weight': 'normal',
         'text-shadow': 'rgb(0, 0, 0) 1px 1px 0px',
-        'z-index': '2147483648',
-        'left': '200px'
+        'z-index': '2147483648'
     };
     $.fn.videoSub = function(options) {
         var _a, opts;
         if (typeof (typeof (_a = $('<video>').addtrack) !== "undefined" && _a !== null)) {
             opts = $.extend({}, $.fn.videoSub.defaults, options);
             return this.each(function() {
-                var $this, _a, bar, container, el, o, src, $body;
-                $body = $('body');
+                var $this, _a, bar, container, el, o, src;
                 el = this;
                 $this = $(this);
                 o = (typeof (_a = $.meta) !== "undefined" && _a !== null) ? $.extend(opts, $this.data()) : opts;
                 src = $('track', this).attr('src');
                 if (typeof src !== "undefined" && src !== null) {
                     container = $('<div class="' + o.containerClass + '">');
-                    container.css('position', 'relative');
                     container = $this.wrap(container).parent();
                     bar = $('<div class="' + o.barClass + '">');
                     if (o.useBarDefaultStyle) {
                         bar.css(css_normal);
-                        bar.css('width',$this.outerWidth() - 40);
+                        subtitle_positioning(bar,false);
                     }
-                    bar.css('left', parseInt(''+(0.375*(parseInt($body.css('width'),10) - 1280)),10)+'px');
                     bar = bar.appendTo(container);
                     el.subtitles = [];
                     el.subcount = 0;
@@ -74,14 +65,12 @@
                             if (document.webkitIsFullScreen === true) {
                                 if (o.useBarDefaultStyle) {
                                     bar.css(css_fullscreen);
-                                    var left = parseInt(''+(0.4375*(parseInt($this.outerWidth(),10) - 1280)+200),10)+'px';
-                                    bar.css('left', left);
+                                    subtitle_positioning(bar,true);
                                 }
                             }else {
                                 if (o.useBarDefaultStyle){
                                     bar.css(css_normal);
-                                    var left = parseInt(''+(0.375*(parseInt($body.css('width'),10) - 1280)),10)+'px';
-                                    bar.css('left', left);
+                                    subtitle_positioning(bar,false);
                                 }
                             }
                         });
@@ -149,5 +138,12 @@
         containerClass: 'videosub-container',
         barClass: 'videosub-bar',
         useBarDefaultStyle: true
+    };
+
+    subtitle_positioning = function(bar,fullscreen){
+        var $player = $('#player');
+        bar.css('width',$player.css('width'));
+        bar.css('left',$player.offset().left);
+        bar.css('top',(parseInt($player.offset().top) + $player.outerHeight()-(fullscreen?50:95))+'px');
     };
 })(jQuery);

@@ -28,6 +28,7 @@ function readSingleFile(e) {
         reader.onload = function (e) {
             var contents = e.target.result;
             dbcache = contents;
+            $j('#player').children('track').remove();
             $j('#player').append('<track src="/subtitle" kind="subtitle" srclang="en-US" label="English" />');
             $j('#player').videoSub();
         };
