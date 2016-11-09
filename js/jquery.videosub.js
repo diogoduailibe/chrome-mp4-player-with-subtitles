@@ -80,7 +80,7 @@
                             }else {
                                 if (o.useBarDefaultStyle){
                                     bar.css(css_normal);
-                                    var left = parseInt(''+(0.625*(parseInt($body.css('width'),10) - 1280)),10)+'px';
+                                    var left = parseInt(''+(0.375*(parseInt($body.css('width'),10) - 1280)),10)+'px';
                                     bar.css('left', left);
                                 }
                             }
