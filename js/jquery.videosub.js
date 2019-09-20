@@ -5,10 +5,20 @@
  jQuery port by [Max Wheeler](http://www.icelab.com.au)
  Freeware, Attribution Appreciated
  ------------------------------------------------------------------------------ */
-(function($) {
+(function ($) {
     var ajax = $.ajax;
     var tcsecs, timecode_max, timecode_min, subtitle_positioning;
-    var css_normal = {
+
+    var video_css_normal = {
+        'width': '960px',
+        'height': '480px'
+    };
+    var video_css_fullscreen = {
+        'width': '100%',
+        'height': '100%'
+    };
+
+    var bar_css_normal = {
         'position': 'absolute',
         'text-align': 'center',
         'color': 'yellow',
@@ -16,9 +26,9 @@
         'font-size': '24px',
         'font-weight': 'normal',
         'text-shadow': '#000000 1px 1px 0px',
-        'z-index':'2147483648'
+        'z-index': '2147483648'
     };
-    var css_fullscreen = {
+    var bar_css_fullscreen = {
         'position': 'absolute',
         'text-align': 'center',
         'color': 'yellow',
@@ -28,32 +38,33 @@
         'text-shadow': 'rgb(0, 0, 0) 1px 1px 0px',
         'z-index': '2147483648'
     };
-    $.fn.videoSub = function(options) {
+    $.fn.videoSub = function (options) {
         var _a, opts;
         if (typeof (typeof (_a = $('<video>').addtrack) !== "undefined" && _a !== null)) {
             opts = $.extend({}, $.fn.videoSub.defaults, options);
-            return this.each(function() {
+            return this.each(function () {
                 var $this, _a, bar, container, el, o, src;
                 el = this;
                 $this = $(this);
+                $parentContainer = $('#container');
                 o = (typeof (_a = $.meta) !== "undefined" && _a !== null) ? $.extend(opts, $this.data()) : opts;
                 src = $('track', this).attr('src');
                 if (typeof src !== "undefined" && src !== null) {
                     container = $('<div class="' + o.containerClass + '">');
                     container = $this.wrap(container).parent();
-                    bar = $('<div class="' + o.barClass + '">');
+                    bar = $('<div id="' + o.barClass + '" class="' + o.barClass + '">');
                     if (o.useBarDefaultStyle) {
-                        bar.css(css_normal);
-                        subtitle_positioning(bar,false);
+                        bar.css(bar_css_normal);
+                        subtitle_positioning(bar);
                     }
                     bar = bar.appendTo(container);
                     el.subtitles = [];
                     el.subcount = 0;
-                    el.update = function(req) {
+                    el.update = function (req) {
                         var r, records;
                         records = req.replace(/(\r\n|\r|\n)/g, '\n').split('\n\n');
                         r = 0;
-                        $(records).each(function(i) {
+                        $(records).each(function (i) {
                             var splits = records[i].split('\n');
                             if (splits.length >= 3) {
                                 el.subtitles[r] = [];
@@ -61,27 +72,45 @@
                             }
                         });
 
-                        $this.bind('webkitfullscreenchange',function(e){
+                        $parentContainer.bind('webkitfullscreenchange', function (e) {
                             if (document.webkitIsFullScreen === true) {
                                 if (o.useBarDefaultStyle) {
-                                    bar.css(css_fullscreen);
-                                    subtitle_positioning(bar,true);
+                                    bar.css(bar_css_fullscreen);
+                                    $this.css(video_css_fullscreen);
+                                    subtitle_positioning(bar);
                                 }
-                            }else {
-                                if (o.useBarDefaultStyle){
-                                    bar.css(css_normal);
-                                    subtitle_positioning(bar,false);
+                            } else {
+                                if (o.useBarDefaultStyle) {
+                                    bar.css(bar_css_normal);
+                                    $this.css(video_css_normal);
+                                    subtitle_positioning(bar);
                                 }
                             }
                         });
 
-                        $this.bind('play', function(e) {
+                        $(window).resize(function () {
+                            if (document.webkitIsFullScreen === true) {
+                                if (o.useBarDefaultStyle) {
+                                    bar.css(bar_css_fullscreen);
+                                    $this.css(video_css_fullscreen);
+                                    subtitle_positioning(bar);
+                                }
+                            } else {
+                                if (o.useBarDefaultStyle) {
+                                    bar.css(bar_css_normal);
+                                    $this.css(video_css_normal);
+                                    subtitle_positioning(bar);
+                                }
+                            }
+                        });
+
+                        $this.bind('play', function (e) {
                             return true;//(el.subcount = 0);
                         });
-                        $this.bind('ended', function(e) {
+                        $this.bind('ended', function (e) {
                             return true;//(el.subcount = 0);
                         });
-                        $this.bind('seeked', function(e) {
+                        $this.bind('seeked', function (e) {
                             var _b;
                             el.subcount = 0;
                             _b = [];
@@ -94,7 +123,7 @@
                             }
                             return _b;
                         });
-                        return $this.bind('timeupdate', function(e) {
+                        return $this.bind('timeupdate', function (e) {
                             var subtitle;
                             subtitle = '';
                             if (el.currentTime.toFixed(1) > timecode_min(el.subtitles[el.subcount][1]) && el.currentTime.toFixed(1) < timecode_max(el.subtitles[el.subcount][1])) {
@@ -118,17 +147,17 @@
             });
         }
     };
-    timecode_min = function(tc) {
+    timecode_min = function (tc) {
         var tcpair;
         tcpair = tc.split(' --> ');
         return tcsecs(tcpair[0]);
     };
-    timecode_max = function(tc) {
+    timecode_max = function (tc) {
         var tcpair;
         tcpair = tc.split(' --> ');
         return tcsecs(tcpair[1]);
     };
-    tcsecs = function(tc) {
+    tcsecs = function (tc) {
         var secs, tc1, tc2;
         tc1 = tc.split(',');
         tc2 = tc1[0].split(':');
@@ -140,10 +169,10 @@
         useBarDefaultStyle: true
     };
 
-    subtitle_positioning = function(bar,fullscreen){
+    subtitle_positioning = function (bar) {
         var $player = $('#player');
-        bar.css('width',$player.css('width'));
-        bar.css('left',$player.offset().left);
-        bar.css('top',(parseInt($player.offset().top) + $player.outerHeight()-(fullscreen?50:95))+'px');
+        bar.css('width', $player.css('width'));
+        bar.css('left', $player.offset().left);
+        bar.css('top', (parseInt($player.offset().top) + $player.outerHeight() - 95) + 'px');
     };
 })(jQuery);

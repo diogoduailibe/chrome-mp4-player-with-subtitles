@@ -5,77 +5,82 @@ License: Creative Commons Attribution 3.0 Unported
 License URL: http://creativecommons.org/licenses/by/3.0/
 -->
 <!DOCTYPE HTML>
+
 <head>
     <title>Video Web Player</title>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>
+    <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
     <!--script src="js/jquery.srt.js"></script-->
 
 </head>
-<body>
-<!---start-wrap---->
-<!---start-header---->
-<div class="header">
 
-    <!---start-logo---->
-    <div class="logo">
-        <p style="font-size:34px;">CHROME MP4 PLAYER WITH SUBTITLES</p>
-    </div>
-    <div class="wrap">
-        <!---End-logo---->
-        <!---start-top-menu-search---->
-        <div class="top-menu">
-            <div class="search">
+<body>
+    <!---start-wrap---->
+    <!---start-header---->
+    <div class="header">
+
+        <!---start-logo---->
+        <div class="logo">
+            <p style="font-size:34px;">CHROME MP4 PLAYER WITH SUBTITLES</p>
+        </div>
+        <div class="wrap">
+            <!---End-logo---->
+            <!---start-top-menu-search---->
+            <div class="top-menu">
+                <div class="search">
+                </div>
+                <div class="clear"></div>
             </div>
             <div class="clear"></div>
+            <!---End-top-menu-search---->
         </div>
-        <div class="clear"></div>
-        <!---End-top-menu-search---->
+        <!---End-header---->
     </div>
-    <!---End-header---->
-</div>
-<div class="clear"></div>
-<!---start-content---->
+    <div class="clear"></div>
+    <!---start-content---->
 
     <div class="main-content">
 
-            <div class="left-sidebar">
-                <div class="sidebar-boxs">
-                    <div class="sidebar-box">
-                        <h2>Choose a mp4 and srt</h2>
-                        <div id="filechooser">
-                            <input type="file" name="file" id="up" accept=".srt,.mp4" multiple>
-                            <span id="button">Select File</span>
+        <div class="left-sidebar">
+            <div class="sidebar-boxs">
+                <div class="sidebar-box">
+                    <h2>Choose a mp4 and srt</h2>
+                    <div id="filechooser">
+                        <input type="file" name="file" id="up" accept=".srt,.mp4" multiple>
+                        <span id="button">Select File</span>
+                        <br />
+                        <button id="fullscreen">Fullscreen</button>
 
-                        </div>
                     </div>
-                    <div class="clear"/> </div>
+                </div>
+                <div class="clear" />
+            </div>
 
+
+        </div>
+    </div>
+    <div class="right-content">
+        <div class="right-content-heading">
+            <div class="right-content-heading-left">
+                <h3>Video Player</h3>
+            </div>
+            <div class="right-content-heading-right">
+                <div class="social-icons">
 
                 </div>
             </div>
-            <div class="right-content">
-                <div class="right-content-heading">
-                    <div class="right-content-heading-left">
-                        <h3>Video Player</h3>
-                    </div>
-                    <div class="right-content-heading-right">
-                        <div class="social-icons">
-
-                        </div>
-                    </div>
-                    <div class="clear"></div>
-                </div>
-                <div class="content-grids text-center">
-                    <video id="player" autobuffer="" autoplay="" controls="" crossorigin="" style="z-index:-1 !important;"/>
-                    <!--div class="srt"
+            <div class="clear"></div>
+        </div>
+        <div id="container" class="content-grids text-center">
+            <video id="player" autobuffer="" autoplay="" controls="" crossorigin="" style="z-index:-1 !important;" />
+            <!--div class="srt"
                          data-video="player"
                          data-srt="jellies.srt" /-->
-                </div>
-            </div>
+        </div>
+    </div>
 
-            <div class="clear"></div>
+    <div class="clear"></div>
 
     </div>
     <script src="js/jquery.js"></script>
@@ -84,8 +89,12 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <script src="js/jquery.videosub.js"></script>
     <script type="text/javascript">
         var $j = jQuery.noConflict();
-        $j(document).ready(function(){
+        $j(document).ready(function () {
             document.getElementById('up').addEventListener('change', readSingleFile, false);
+
+            document.getElementById('fullscreen').addEventListener('click', function (e) {
+                document.getElementById('container').webkitRequestFullScreen();
+            }, false);
 
             $j("input[type='file']").change(function () {
             });
@@ -96,9 +105,9 @@ License URL: http://creativecommons.org/licenses/by/3.0/
         });
 
     </script>
-<!---End-content---->
+    <!---End-content---->
 
-<!---End-wrap---->
+    <!---End-wrap---->
 </body>
-</html>
 
+</html>
