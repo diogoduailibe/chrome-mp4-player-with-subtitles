@@ -1201,6 +1201,10 @@ video {
 	background: #000;
 }
 
+video::-webkit-media-controls-fullscreen-button {
+	display: none !important;
+}
+
 .videosub-container {
 	height: 100%;
 }
